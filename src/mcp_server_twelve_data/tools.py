@@ -431,8 +431,9 @@ def register_all_tools(server: FastMCP, _call_endpoint):
 
     @server.tool(name="GetMarketState",
                  description="Check the state of all available exchanges, time to open, and time to close. Returns all available stock exchanges by default.")
-    async def GetMarketState(params: GetMarketStateRequest, ctx: Context) -> GetMarketState200Response:
-        return await _call_endpoint("market_state", params, GetMarketState200Response, ctx)
+    async def GetMarketState(params: GetMarketStateRequest, ctx: Context) -> dict:
+        result = await _call_endpoint("market_state", params, GetMarketState200Response, ctx)
+        return {"exchanges": [item.model_dump() for item in result.root]}
 
     @server.tool(name="GetSymbolSearch",
                  description="This method helps to find the best matching symbol. It can be used as the base for custom lookups. The response is returned in descending order, with the most relevant instrument at the beginning.")
@@ -606,8 +607,9 @@ def register_all_tools(server: FastMCP, _call_endpoint):
 
     @server.tool(name="GetSplitsCalendar",
                  description="This API method returns split data as a calendar for a given date range. To call custom period, use start_date and end_date parameters.")
-    async def GetSplitsCalendar(params: GetSplitsCalendarRequest, ctx: Context) -> GetSplitsCalendar200Response:
-        return await _call_endpoint("splits_calendar", params, GetSplitsCalendar200Response, ctx)
+    async def GetSplitsCalendar(params: GetSplitsCalendarRequest, ctx: Context) -> dict:
+        result = await _call_endpoint("splits_calendar", params, GetSplitsCalendar200Response, ctx)
+        return {"splits": [item.model_dump() for item in result.root]}
 
     @server.tool(name="GetTimeSeriesSuperTrend",
                  description="The Supertrend indicator is a trend-following tool that uses a combination of price, time, and volatility to generate potential entry and exit points in trending markets.")
@@ -626,8 +628,9 @@ def register_all_tools(server: FastMCP, _call_endpoint):
 
     @server.tool(name="GetDividendsCalendar",
                  description="This API method returns dividend data as a calendar for a given date range. To call custom period, use start_date and end_date parameters.")
-    async def GetDividendsCalendar(params: GetDividendsCalendarRequest, ctx: Context) -> GetDividendsCalendar200Response:
-        return await _call_endpoint("dividends_calendar", params, GetDividendsCalendar200Response, ctx)
+    async def GetDividendsCalendar(params: GetDividendsCalendarRequest, ctx: Context) -> dict:
+        result = await _call_endpoint("dividends_calendar", params, GetDividendsCalendar200Response, ctx)
+        return {"dividends": [item.model_dump() for item in result.root]}
 
     @server.tool(name="GetEarningsEstimate",
                  description="This API endpoint returns analysts' estimate for a company's future quarterly and annual earnings per share (EPS).")
